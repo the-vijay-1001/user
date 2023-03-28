@@ -1,0 +1,129 @@
+<section>
+    <div>
+        <section class="container-fluid main">
+            <nav class=" navbar navbar-expand-md" id="nav">
+                <div class="" id="mynav">
+                    <a class="mt-4" id="im" href="#"><img src="/img/amazon-logo-PNG-11.png" height="50px" width="180px"
+                            alt=""></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsibleNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse mx-5" id="collapsibleNavbar">
+                        <ul class="navbar-nav m-auto " style="display: inline-flex;">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/"><i class="fa fa-home" aria-hidden="true"
+                                        style="margin-right: 1vh !important;font-size: 20px !important;color: white !important;"></i>Home
+                                    |</a>
+                            </li>
+                            <li class="nav-item">
+                                <!-- <a class="nav-link" href="#"><i class="fa fa-list" aria-hidden="true"
+                                        style="margin-right: 1vh !important;font-size: 17px !important;color: white !important;"></i>Category
+                                </a> -->
+                                <div class="dropdown">
+                                    <button class="dropbtn"><i class="fa fa-list" aria-hidden="true"
+                                            style="margin-right: 1vh !important;font-size: 19px !important;color: white !important;"></i>Category</button>
+                                    <div class="dropdown-content scroll">
+                                        <%categoryList.map((category,index)=>{%>
+                                            <a href="/product/<%=category.categoryName%>">
+                                                <%=category.categoryName%>
+                                            </a>
+                                            <%})%>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/product/all"><i class="fa fa-superpowers" aria-hidden="true"
+                                        style="margin-right: 1vh !important;font-size: 16px !important;color: white !important;"></i>All
+                                    Products |</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa fa-picture-o"
+                                        style="margin-right: 1vh !important;font-size: 17px !important;color: white !important;"
+                                        aria-hidden="true"></i>Gallary |</a>
+                            </li>
+
+                        </ul>
+                        <div class="d-flex justify-content-center ">
+                            <div class="searchbar">
+                                <input class="search_input" onkeyup="searchProduct(this.value)" type="text"
+                                    name="search" placeholder="Search...">
+                                <a href="#" class="search_icon"><i class="fa fa-search ms-4 pb-1 pl-2 text-dark"
+                                        aria-hidden="true" style="margin-left: -1vh !important;"></i></a>
+                            </div>
+                        </div>
+
+                        <button type="button" id="btn1" class="btn  mx-3">
+                            <a href="/cart/view-cart"><i class="fa fa-shopping-bag" aria-hidden="true"
+                                    style="font-size: 35px !important;color: black;margin-right: 1vh !important;font-size: 28px !important;color: white !important;"></i></a>
+                        </button>
+
+                        <%if(currentUser){%>
+                            <a href="/order/view" style="color: black;margin-top: 5px;"><i class="fa fa-history"
+                                    aria-hidden="true"
+                                    style="font-size: 5vh !important;margin-right: 2vh !important;font-size: 28px !important;color: white !important;"></i></a>
+                            <button type="button" id="btn0" class="btn  mx-2"><a href="/signout"><i
+                                        class="fa fa-user-circle-o"
+                                        style="margin-right: 1vh !important;font-size: 22px !important;color: black !important;"
+                                        aria-hidden="true"></i>SignOut</a>
+                            </button>
+
+                            <%}else{%>
+                                <button type="button" id="btn0" class="btn  mx-0"><a href="/signin"><i
+                                            class="fa fa-user-circle-o"
+                                            style="color: black !important;margin-right: 1vh !important;font-size: 23px !important;"
+                                            aria-hidden="true"></i>SignIn</a>
+                                </button>
+                                <button type="button" id="btn0" class="btn  mx-3"><a href="/singup"><i
+                                            class="fa fa-user-circle-o" aria-hidden="true"
+                                            style="font-size: 22px;margin-right: 1vh !important;color: black !important;"></i>SignUp</a>
+                                </button>
+                                <%}%>
+
+                    </div>
+                </div>
+            </nav>
+        </section>
+    </div>
+</section>
+<script>
+    function searchProduct(keyword) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "/product/search/" + keyword, true);
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4) {
+                let data = xhttp.responseText;
+                data = JSON.parse(data);
+                let productView = "";
+                for (let product of data.productList) {
+                    let priceString = '';
+                    let productAddToCart = '';
+                    if (product.discountPercentage) {
+                        priceString = ' <del class="text-danger">' + product.price + '</del>' +
+                            '<span class="text-success">' + Math.round(product.price - ((product.price * product.discountPercentage) / 100)) + ' Rs.</span>';
+
+                    }
+                    else {
+                        priceString = '<span class="text-success">' + product.price + ' Rs.</span>'
+                    }
+
+                    productView = productView + '<div style="height: 450px;box-shadow: 3px 3px 5px;border-radius: 2vh;overflow: hidden;" class="col-md-3 p-3 " >' +
+                        '<div style=" box-shadow: 5px 5px 5px;">' +
+                        '<img src="' + product.thumbnail + '" style="width:100%; height: 180px;border-radius:2vh;" />' +
+                        '<h3 class="text-center mt-2">' + product.title.substring(0, 20) + '</h3>' +
+                        '<p class="text-center" style="font-size: 20px;">' +
+                        'Price :' + priceString +
+                        '</p>' +
+                        '<h3 style="cursor:pointer;" class="text-center mt-2 mb-3 text-primary">View description</h3>' +
+                        '<div class="text-center">' +
+
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                }
+                document.getElementById("product-display").innerHTML = productView;
+            }
+        }
+    }
+</script>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('ExternalLinks.ejs')%>
+        <%-include('ExternalScript.ejs')%>
+</head>
+
+<body>
+
+    <%- include("header.ejs")%>
+        <%- include('div.ejs')%><br><br>
+            <script>
+                
+                function loadCartItems() {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.open("GET", "/cart/load-cart", true);
+                    xhttp.send();
+                    xhttp.onreadystatechange = function () {
+                        if (xhttp.readyState == 4) {
+                            let data = JSON.parse(xhttp.responseText);
+                            let totalBillAmount = 0;
+                            data = data.map((item, index) => {
+                                item.qty = 1;
+                                totalBillAmount = totalBillAmount + item.price;
+                                return item;
+                            });
+                            document.getElementById("totalBillAmount").innerHTML = "" + totalBillAmount;
+                            localStorage.setItem("cart-items", JSON.stringify(data));
+                        }
+                    }
+                }
+                
+                function changeQty(index) {
+                    let updateQty = document.getElementById("qty" + index).value;
+                    let priceObject = document.getElementById("price" + index);
+                    let totalBillAmountObject = document.getElementById("totalBillAmount");
+                    let data = localStorage.getItem("cart-items");
+                    data = JSON.parse(data);
+                    //let product = data[index];
+                    data[index].qty = updateQty;
+                    let updatedPrice = updateQty * data[index].price;
+                    priceObject.innerHTML = "&#8377;" + updatedPrice;
+                    let amount = 0;
+
+                    data.map((item, index) => {
+                        amount = amount + item.price * item.qty;
+                    });
+                    totalBillAmountObject.innerHTML = "" + amount;
+                    localStorage.setItem("cart-items", JSON.stringify(data));
+                }
+                function getDataFromStorage() {
+                    let hiddenField = document.getElementById("cart");
+                    hiddenField.value = localStorage.getItem("cart-items");
+                }
+                loadCartItems();                
+                function f1(id){
+                    swal({
+                        title: "Are you sure?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        })
+                        .then(willDelete => {
+                        if (willDelete) {
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.open("GET", "/cart/remove/"+id, true);
+                            xhttp.send();
+                            
+                            xhttp.onreadystatechange = function () {
+                                if (xhttp.readyState == 4){
+                                    setTimeout(()=>{
+                                        location.reload();
+                                    },1000)          
+                                }
+                            }
+                            setTimeout(()=>{
+                                swal("deleted !",{
+                                icon: "success",
+                                buttons:false,
+                                
+                                });
+                            },300)
+
+                        } else {
+                            setTimeout(()=>{
+                                        location.reload();
+                                    },1000)          
+
+                            setTimeout(()=>{
+                                swal("canceled!",{
+                                icon:"error",
+                                buttons:false
+                            });
+                            },300);
+                            
+                        }
+                        });
+                
+                    }
+                
+            </script>
+            <div class="row ms-5" >
+
+                <div class="col-md-8" >
+                    <%if(cartItems.length !=0){%>
+                        <%cartItems.map((item,index)=>{%>
+
+                            <div   class="row container mt-3" style="height: 110px;box-shadow: 5px 5px 15px black;" >
+                                <div class="col-md-3 mt-2  " style="height:15vh;padding-left: 5vh !important;">
+                                    <img src="<%=item.thumbnail%>" style="width:170px; height: 95px;" />
+                                </div>
+                                <div class="text-center pt-3 col-md-3  mt-3">
+                                    <span class="fw-bold" style="font-size: 2.8vh;">
+                                        <%=item.brand.substring(0,10)%>
+                                    </span><br>
+                                    <span style="font-family: Comio Sans MS;font-size: 1.9vh;">
+                                        <%=item.title%>
+                                    </span>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <input class="" type="number"
+                                        style="width:7vh;margin-left:11vh;margin-top: 6.5vh;border: 1px solid;"
+                                        onchange="changeQty('<%=index%>')" id="qty<%=index%>" type="number" value="1"
+                                        min="1" max="<%=item.stock%>" style="width:35px;" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label id="price<%=index%>"
+                                        style="width:7vh;margin-left:11vh;margin-top: 6vh;font-family: Comio Sons ms;font-size: 2.7vh;">&#8377;
+                                        <%=item.price%>
+                                    </label>
+                                </div>
+                                <div class="col-md-1" style=" margin-top: 39px;" >
+                                    <a onclick="f1('<%=item.id%>')" ><button  type="button" class="btn btn-outline-danger">X</button></a>
+                                </div>
+                                
+                            </div>
+
+                            <%})%>
+                                <%}else{%>
+                                    <center>
+                                        <h2 class="text-danger" style="margin-top: 20vh;font-family: Comic Sans MS;">
+                                            oops! no any selected Item</h2>
+                                    </center>
+                                    <center>
+                                        <h3 style="margin-top: 5vh;color: rgb(10, 205, 10);">Get More Latest Trends And
+                                            Products ....</h3>
+                                    </center>
+                                    <br><br>
+                                    <center>
+                                        <div class="wrapper" style="margin-top: -5px;margin-left: 45vh !important;">
+                                            <div class="card bg-warning">
+                                                <h1>
+                                                    <a href="/">
+                                                        <button class="enclosed" style="color: black !important;">
+                                                            Go Shop !
+                                                        </button>
+                                                    </a>
+                                                </h1>
+                                            </div>
+                                        </div>
+                                    </center>
+                                    <%}%>
+
+                </div>
+                <div class="col-md-3 border "
+                    style="height: 75vh;position: fixed;z-index: 1; right: 50px; top: 18vh;background-color: black; ">
+
+                    <center>
+                        <h2 class="text-white mt-4" style="font-family: Comic sans ms;">
+                            Order Summery
+                        </h2>
+                        <div style="width: 85%; height: 3px; background-color: white; margin-top: 20px;"></div><br>
+                    </center>
+                    <h4 style="color: white;margin-top: 5vh;">
+                        Total Items : <span style="color:white">
+                            <%=cartItems.length%>
+                        </span>
+                    </h4>
+                    <h4 style="color: white;margin-top: 5vh;">
+                        Bill Amount : &#8377; <span id="totalBillAmount" style="color: rgb(4, 242, 4); " ></span>
+                    </h4>
+                    <h4 style="color: white;margin-top: 5vh;">
+                        Shipping Charges : &nbsp;&nbsp;&#8377; 0.00
+                    </h4>
+                    <!-- <button onclick="getDataFromStorage()" data-bs-toggle="modal" data-bs-target="#myModal" class="btn"  style="width:100%;background-color: white;margin-top: 5vh;">Checkout Now</button> -->
+
+                    <!-- ye checkout wala card hai................................................................ -->
+                    <%if(cartItems.length !=0){%>
+                        <div class="wrapper">
+                            <div class="card" style="background-color: rgb(4, 207, 4);">
+                                <h1>
+                                    <button class="enclosed" onclick="getDataFromStorage()" data-bs-toggle="modal"
+                                        data-bs-target="#myModal">
+                                        checkout
+                                    </button>
+                                </h1>
+                            </div>
+                        </div>
+                        <%}else{%>
+                            <div class="wrapper">
+                                <div class="card " style="background-color: rgb(4, 207, 4);">
+                                    <h1>
+                                        <button class="enclosed" disabled onclick="getDataFromStorage()"
+                                            data-bs-toggle="modal" data-bs-target="#myModal">
+                                            checkout
+                                        </button>
+                                    </h1>
+                                </div>
+                            </div>
+                            <%}%>
+
+                </div>
+            </div><br><br>
+
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content ">
+                        <form action="/order/save" method="post">
+                            <!-- Modal Header -->
+                            <input type="hidden" name="cartItems" id="cart" />
+                            <div class="modal-header">
+                                <h4 class="modal-title">Enter delivery details</h4>
+                                <button type="button" class="close btn btn-danger" data-bs-dismiss="modal">x</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Contact person name</label>
+                                    <input type="text" name="contactPerson" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact number</label>
+                                    <input type="text" name="contactNumber" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Delivery address</label>
+                                    <textarea class="form-control" name="delieveryAddress"></textarea>
+                                </div>
+
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <!-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button> -->
+                                <button type="submit" class="btn "
+                                    style="width: 100%;background-color: rgb(39,160,39);">Place order</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+</body>
+
+</html>

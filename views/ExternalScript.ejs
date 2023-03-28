@@ -1,0 +1,15 @@
+<script>
+    function addInToCart(userId,productId){
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET","/cart/add-to-cart/"+userId+"/"+productId,true);
+        xhttp.send();
+        xhttp.onreadystatechange = function(){
+         if(xhttp.readyState == 4){
+           let data = JSON.parse(xhttp.responseText);
+             document.getElementById("mess").innerHTML = ""+data.message+"";
+           
+         }
+       }
+    }
+</script>
+

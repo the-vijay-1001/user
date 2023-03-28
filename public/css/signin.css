@@ -1,0 +1,46 @@
+.section{
+    margin-top: 12vh;
+    background-color: white ;
+    width: 900px !important;
+    height: 64.5vh;
+    /* border: 1px solid; */
+}
+#email,#pass,#check,#login,#name,#contact{
+    background-color: transparent;
+    margin-left: 10vh;
+}
+#logimg{
+    margin-top: 0.05vh;
+}
+#log{
+    
+    margin-left: 6vh;
+    font-size: 5vh;
+}
+#with{
+    margin-left: 6vh;
+
+}
+#exist{
+    margin-left: 8vh;
+}
+#email,#pass,#name,#contact{
+    width: 30vh;
+    background-color: transparent;
+    border: 0;
+    border-bottom: 2px solid;
+}
+#email:hover::placeholder,#pass:hover::placeholder,#name:hover::placeholder,#contact:hover::placeholder{
+    visibility: hidden;
+}
+.fa{
+    margin-right: 1vh;
+}
+#in{
+
+    margin-left: 6vh;
+    width: 30%;
+}
+#email:hover,#pass:hover,#name:hover,#contact:hover{
+    box-shadow: 1px 0px 2px;
+}

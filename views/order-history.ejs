@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <%- include('ExternalLinks.ejs')%>
+      <%-include('ExternalScript.ejs')%>
+         <style>
+
+         </style>
+</head>
+
+<body>
+   <%-include('header.ejs')%>
+      <%-include('div.ejs')%>
+         <div class="container p-5 mt-5" style="background-color: rgb(158, 150, 150);border-radius: 3vh;">
+            <div id="project" class="project ">
+               <div class="container border p-0">
+                  <table class="table ">
+                     <thead>
+                        <tr class="text-center "style="background-color:white;">
+                           <th>OrderId</th>
+                           <th>Date</th>
+                           <th>Bill Amount</th>
+                           <th>Contact Person</th>
+                           <th>Address</th>
+                           <th>Status</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <%historyItem.map((order, index)=>{%>
+                           <tr class="text-center">
+                              <td><b><a href="/cart/view-items/<%=order.id%>/<%=order.contactPerson%>"  style="color: rgb(14, 37, 18);">
+                                    <%=order.id%>
+                                 </a></b></td>
+                              <td>
+                                 <%=order.date%>
+                              </td>
+                              <td>
+                                 <%=order.billamount%>
+                              </td>
+                              <td>
+                                 <%=order.contactPerson%>
+                              </td>
+                              <td>
+                                 <%=order.delieveryAddress%>
+                              </td>
+                              <td>
+                                 <%=order.status%>
+                              </td>
+                           </tr>
+                           <%})%>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+
+         
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('ExternalLinks.ejs')%>
+</head>
+<body>
+   <%-include('header.ejs')%>
+   <%-include('div.ejs')%>
+        <section class="section container">
+            <div class="row "  style=" box-shadow: 5px 8px 15px black;">
+                <div class="col-md-6 p-0">
+                    <img src="/img/img7.jpg" id="logimg" height="476" width="100%" alt="">
+                </div>
+                <div class="col-md-6" id="sec"><br><hr>
+                    <form action="/signin" method="post">
+                        <h1  id="log"><b>Login Here</b></h1><br>
+                        <input  type="text" id="email" name="email" placeholder="  email......"><br><br>
+                        <input type="password" id="pass" name="password" placeholder="  password ......"><br><br>
+                        <input type="checkbox" id="check" class="mt-1" ><small> Remember Password</small><br><br>
+                        <button type="submit" id="in" onclick="on()" class="btn btn-outline-dark rounded-pill">Sign In</button><br><br><br>
+                        <span id="with"><b>SignIn With</b></span><span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-facebook-square" aria-hidden="true"></i>  <i class="fa fa-twitter" aria-hidden="true"></i><i class="fa fa-google-plus" aria-hidden="true"></i></span><a href="/singup" style="font-size: 2vh;margin-left: 3vh;">New User ?</a><br><br>
+                    </form>
+                    <hr><br>
+                </div>
+            </div>
+        </section><br><br><br>
+        <%-include('footer.ejs')%>
+</body>
+</html>

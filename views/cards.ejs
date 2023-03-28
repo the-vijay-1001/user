@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <style>
+        #inner {
+            background-color: rgb(246, 245, 244);
+            width: 70%;
+            height: 50vh;
+            margin-left: 11vh;
+            margin-top: 6vh;
+            padding-top: 7.8vh;
+            box-shadow: 2px 5px 10px 2px rgb(87, 75, 75);
+            
+        }
+
+        i {
+            font-size: 22px !important;
+        }
+        .text-success{
+            margin-left: -1.2vh;
+        }
+        #img {
+            width: 65%;
+            height: 45vh;
+            margin-left: -10vh;
+            /* border-radius: 3vh; */
+            position: relative;
+            /* border-radius: 2vh; */
+            margin-top: 2vh;
+        }
+
+        img:hover {
+            box-shadow: 0px 0px 15px black;
+            margin-top: -4vh;
+            transition: 0.2s;
+        }
+
+        #innercontent {
+            margin-bottom: 5.5vh;
+            padding-left: 2vh;
+            padding-top: 3vh;
+            background-color: whitesmoke;
+            border-radius: 0vh;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="container-fluid">
+        <section class="row">
+            <%productList.map((product,index)=>{%>
+                
+                <div class="col-md-4 ">
+                    <div id="inner" class="row">
+
+                        <div id="img" class="col-md-3">
+                            <a href="#"><img src="<%=product.thumbnail%>" height="210" width="250" alt="" style="border-radius: 50%;"></a>
+                        </div>
+                        <div class="col-md-5" id="innercontent">
+                            <span style="color: red;font-family: Comic Sans MS;font-size: 4vh;margin-top: -2vh !important;"><%=product.brand.substring(8,0)%></span><br><br>
+                            <h5 class="text-center">
+                                
+                                <%=product.title.substring(8,0)%>
+                                
+                            </h5>
+                            
+                            <p class="text-center" style="font-size: 20px;">
+                                Rs. :
+                                <%if(product.discountPercentage){%>
+
+                                    <i class="fa fa-inr" aria-hidden="true" id="inr"></i> <span
+                                        class="text-success"><%=Math.round(product.price-((product.price*product.discountPercentage)/100))%></span>
+                                    <del class="text-danger" style="font-size: 15px;">
+                                        <%=product.price%>
+                                    </del>
+                                    <%}else{%>
+                                        <span class="text-success">
+                                            <%=product.price%> Rs.
+                                        </span>
+                                        <%}%>
+                            </p>
+                            <%if(currentUser){%>
+                                <a onclick="addInToCart('<%=currentUser.id*1+1543%>','<%=product.id*1 + 2567%>')">
+                                    <button style="width:100%;margin-top: 1vh;" class="btn btn-warning">Add To Cart</button>
+                                </a>
+                                <%}else{%>
+                                    <a href="/cart/add-to-cart/''/''">
+                                        <button style="width:100%;margin-top: 1vh;" class="btn btn-warning mb-3">Add To Cart</button>
+                                    </a>
+                                <%}%>
+                        </div>
+                        
+                    </div>
+                </div>
+                <%})%>
+        </section>
+    </section>
+    <%-include('pagination.ejs')%>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('ExternalLinks.ejs')%>
+    <%-include('ExternalScript.ejs')%>
+</head>
+    <body>
+        <%-include('header.ejs')%>
+        <%-include('div.ejs')%>
+        <br><br><div>
+                <h2 class="text-dark mx-5 " style="font-family: Comic Sans MS;font-size: 3.5vh;"><i class="fa fa-bars" aria-hidden="true"></i><%=message.toUpperCase()%></h2>
+        </div>
+        <%-include('card.ejs')%><br>
+        <%-include('footer.ejs')%>
+    </body>
+</html>
